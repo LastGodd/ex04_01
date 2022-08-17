@@ -39,11 +39,25 @@
  			});
  	}
  	
- 	
+ 	function remove(rno, callback, error) {
+ 		$.ajax({
+			type : 'delete',
+			url : '/replies/' + rno,
+		}).done(function(deleteResult, status, xhr) {
+			if(callback) {
+				callback(deleteResult);
+			};
+		}).fail(function(xhr, status, er) {
+			if(error) {
+				error(er);
+			}
+		});
+ 	}
  	
  	
  	return {
  		add:add,
- 		getList:getList
+ 		getList:getList,
+		remove:remove
  	};
  })();
