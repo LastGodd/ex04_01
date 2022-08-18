@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.zerock.domain.Criteria;
+import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 
 public interface ReplyService {
@@ -17,4 +18,6 @@ public interface ReplyService {
 	public int modify(ReplyVO vo);
 
 	public List<ReplyVO> getList(@Param("cri") Criteria cri, @Param("bno") Long bno);
+	
+	public ReplyPageDTO getListPage(Criteria cri, Long bno);
 }
