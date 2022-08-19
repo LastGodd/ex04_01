@@ -3,6 +3,7 @@ package org.zerock.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +15,6 @@ import org.zerock.domain.Criteria;
 import org.zerock.domain.PageDTO;
 import org.zerock.service.BoardService;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
 @RequestMapping("/board/*")
 @Controller
 public class BoardController {
@@ -30,11 +28,14 @@ public class BoardController {
 //	}
 
 	@GetMapping("/list")
-	public void getList(Criteria cri, Model model) {
+	public void getList(Criteria cri, Model model, ModelMap map) {
 		model.addAttribute("list", service.getList(cri));
 		//model.addAttribute("pageMaker", new PageDTO(cri, 70));
 		int total = service.getTotal(cri);
-		model.addAttribute("pageMaker", new PageDTO(cri, total));
+		// model.addAttribute("pageMaker", new PageDTO(cri, total));
+		
+		// ModelMap 사용하면 길게 작성할 필요없이 가독성도 좋아진다
+		map.put("pageMaker", new PageDTO(cri, total));
 	}
 
 	// @ModelAttribute : 자동으로 Model에 데이터를 지정한 이름으로 담아줌 / 파라미터로 지정하면 @ModelAttribute를 사용하지 않아도 되지만 명시적으로 이름을 지정하기 위해서 사용 

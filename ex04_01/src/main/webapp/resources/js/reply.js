@@ -64,7 +64,6 @@
  			url : '/replies/' + reply.rno,
  			data : JSON.stringify(reply),
  			contentType : "application/json; charset=utf-8"
- 		
  		}).done(function(result, status, xhr) {
  			if(callback) {
  				callback(result);

@@ -19,7 +19,7 @@
 	
 	<update id="update">
 		update tbl_reply set 
-		reply = #{reply}, 
+		reply = #{reply},
 		updateDate = sysdate 
 		where rno = #{rno}
 	</update>
@@ -28,7 +28,7 @@
 		<![CDATA[
 			SELECT rno, bno, reply, replyer, replyDate, updateDate
 			FROM (
-				SELECT 	/*+ INDEX_DESC(tbl_reply pk_reply) */
+				SELECT 	/*+ INDEX(tbl_reply pk_reply) */
 					rownum rn, rno, bno, reply, replyer, replyDate, updateDate
 				FROM tbl_reply
 				WHERE bno = #{bno} AND rno > 0 AND rownum <= #{cri.pageNum} * #{cri.amount}

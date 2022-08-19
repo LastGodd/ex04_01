@@ -115,7 +115,7 @@
 				<!-- 댓글작성자 -->
 				<div class="modal-group">
 					<label>Replyer</label>
-					<input class="form-control" name='replyer' value='replayer'>
+					<input class="form-control" name='replyer' value='replyer'>
 				</div>
 				<!-- 댓글등록일 -->
 				<div class="modal-group">
@@ -147,6 +147,23 @@
 <%@include file="../includes/footer.jsp"%>
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var operForm = $("#operForm");
+
+		$("button[data-oper='modify']").on("click", function(e) {
+			operForm.attr("action", "/board/modify").submit();
+		});
+
+		$("button[data-oper='list']").on("click", function(e) {
+			operForm.find("#bno").remove();
+			operForm.attr("action", "/board/list").submit();
+		});
+
+	});
+</script>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		var bnoValue = '<c:out value="${board.bno}"/>';
@@ -297,9 +314,32 @@
 			replyPageFooter.html(str);
 		}
 		
-		replyPageFooter.on("click", "" ,function(e) {
-			
+		replyPageFooter.on("click", "li a" ,function(e) {
+			e.preventDefault();
+			var targetPageNum = $(this).attr("href");
+			pageNum = targetPageNum;
+			showList(pageNum);
 		});
+		
+		modalModBtn.on("click", function(e){
+			var reply = {rno:modal.data("rno"), reply:modalInputReply.val()};
+			replyService.update(reply, function(result){
+				alert(result);
+				modal.modal("hide");
+				showList(pageNum);
+			});
+		});
+		
+		modalRemoveBtn.on("click", function(e){
+			var rno = modal.data("rno");
+			replyService.remove(rno, function(result){
+				alert(result);
+				modal.modal("hide");
+				showList(pageNum);
+			});
+		});
+		
+		
 	});
 </script>
 
@@ -362,18 +402,3 @@
 	}); */
 </script>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		var operForm = $("#operForm");
-
-		$("button[data-oper='modify']").on("click", function(e) {
-			operForm.attr("action", "/board/modify").submit();
-		});
-
-		$("button[data-oper='list']").on("click", function(e) {
-			operForm.find("#bno").remove();
-			operForm.attr("action", "/board/list").submit();
-		});
-
-	});
-</script>

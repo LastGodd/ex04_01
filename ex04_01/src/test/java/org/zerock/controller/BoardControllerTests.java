@@ -1,5 +1,30 @@
 package org.zerock.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
+import javax.servlet.http.Part;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,11 +61,29 @@ public class BoardControllerTests {
 //		log.info(
 //				mockMvc.perform(MockMvcRequestBuilders.get("/board/list")).andReturn().getModelAndView().getModelMap());
 //	}
+	
+	
+	// 임시 비밀번호 난수 만드는 방법
+	@Test
+	public void testUUID() {
+		
+		// 32자리 생성
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		
+		// 10자리로 자르기
+		String tempPw = uuid.substring(0, 10);
+		
+		log.info("UUID: " + uuid);
+		log.info("tempPw: " + tempPw);
+		
+		
+	}
 
 	@Test
 	public void testGetList() throws Exception {
 		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list").param("pageNum", "2").param("amount", "10"))
 				.andReturn().getModelAndView().getModelMap());
+		
 	}
 
 	@Test
