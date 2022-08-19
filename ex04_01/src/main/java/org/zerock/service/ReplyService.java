@@ -8,7 +8,7 @@ import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
 
 public interface ReplyService {
-	
+
 	public int register(ReplyVO vo);
 
 	public ReplyVO get(Long bno);
@@ -18,6 +18,6 @@ public interface ReplyService {
 	public int modify(ReplyVO vo);
 
 	public List<ReplyVO> getList(@Param("cri") Criteria cri, @Param("bno") Long bno);
-	
+
 	public ReplyPageDTO getListPage(Criteria cri, Long bno);
 }

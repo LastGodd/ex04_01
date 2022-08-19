@@ -6,7 +6,7 @@
 
 	<insert id="insert">
 		insert into tbl_reply(rno, bno, reply, replyer)
-		values (seq_reply.nextval, ${bno}, #{reply}, #{replyer})
+		values (seq_reply.nextval, #{bno}, #{reply}, #{replyer})
 	</insert>
 	
 	<select id="read" resultType="org.zerock.domain.ReplyVO">
@@ -31,9 +31,9 @@
 				SELECT 	/*+ INDEX_DESC(tbl_reply pk_reply) */
 					rownum rn, rno, bno, reply, replyer, replyDate, updateDate
 				FROM tbl_reply
-				WHERE bno = ${bno} AND rno > 0 AND rownum <= #{cri.pageNum} * #{cri.amount}
+				WHERE bno = #{bno} AND rno > 0 AND rownum <= #{cri.pageNum} * #{cri.amount}
 				)
-			WHERE rn < (#{cri.pageNum} -1) * #{cri.amount}
+			WHERE rn > (#{cri.pageNum} -1) * #{cri.amount}
 		]]>
 		
 	</select>

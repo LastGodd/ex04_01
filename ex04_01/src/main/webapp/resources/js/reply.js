@@ -35,9 +35,9 @@
  					callback(data.replyCnt, data.list); // 댓글 숫자와 목록을 가져오는 경우
  				}
  			}).fail(function(xhr, status, err) {
- 				if(error) {
- 					error();
- 				}
+				if(error) {
+					error();
+				}
  			});
  	}
  	
