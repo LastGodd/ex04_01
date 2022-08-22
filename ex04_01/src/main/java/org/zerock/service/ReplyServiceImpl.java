@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.domain.Criteria;
 import org.zerock.domain.ReplyPageDTO;
 import org.zerock.domain.ReplyVO;
+import org.zerock.mapper.BoardMapper;
 import org.zerock.mapper.ReplyMapper;
 
 import lombok.extern.log4j.Log4j;
@@ -17,10 +19,16 @@ public class ReplyServiceImpl implements ReplyService {
 
 	@Autowired
 	private ReplyMapper mapper;
+	
+	@Autowired
+	private BoardMapper boardMapper;
 
+	// 트랜잭션을 이용해 댓글 작성과 작성 후 board 테이블에 댓글 갯수를 +1 해준다
+	@Transactional
 	@Override
 	public int register(ReplyVO vo) {
 		log.info("register....." + vo);
+		boardMapper.updateReplyCnt(vo.getBno(), 1);
 		return mapper.insert(vo);
 	}
 
@@ -30,9 +38,12 @@ public class ReplyServiceImpl implements ReplyService {
 		return mapper.read(bno);
 	}
 
+	@Transactional
 	@Override
 	public int remove(Long bno) {
 		log.info("remove....." + bno);
+		ReplyVO vo = mapper.read(bno);
+		boardMapper.updateReplyCnt(vo.getBno(), -1);
 		return mapper.delete(bno);
 	}
 
