@@ -2,6 +2,7 @@ package org.zerock.service;
 
 import java.util.List;
 
+import org.zerock.domain.BoardAttachVO;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 
@@ -13,11 +14,13 @@ public interface BoardService {
 
 	public BoardVO get(Long bno);
 
-	public boolean register(BoardVO vo);
+	public void register(BoardVO vo);
 
 	public boolean remove(Long bno);
 
 	public boolean modify(BoardVO vo);
 
 	public int getTotal(Criteria cri);
+	
+	public List<BoardAttachVO> getAttachList(Long bno);
 }
