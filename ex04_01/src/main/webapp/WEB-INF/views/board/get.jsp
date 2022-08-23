@@ -57,7 +57,11 @@
 	width: 600px;
 }
 </style>
-
+<div class="bigPictureWrapper">
+	<div class="bigPicture">
+	
+	</div>
+</div>
 <div id="page-wrapper">
 	<div class="row">
 		<div class="col-lg-12">
@@ -107,11 +111,6 @@
 	</div>
 	<!-- /.row -->
 	
-	<div class="bigPictureWrapper">
-		<div class="bigPicture">
-		
-		</div>
-	</div>
 	<!-- 첨부파일 -->
 	<div class="row">
 		<div class="col-lg-12">
@@ -250,6 +249,31 @@
 				$(".uploadResult ul").html(str);
 			});
 		})();
+		
+		$(".uploadResult").on("click", "li", function(e) {
+			console.log("view image");
+			var liObj = $(this);
+			var path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uidd") + "_" + liObj.data("filename"));
+			if(liObj.data("type")) {
+				showImage(path.replace(new RegExp(/\\/g), "/"));
+			} else {
+				// download
+				self.location ="/download?fileName=" + path;
+			}
+		});
+		
+		function showImage(fileCallPath) {
+			$(".bigPictureWrapper").css("display", "flex").show();
+			
+			$(".bigPicture").html("<img src='/display?fileName="+ fileCallPath +"'>").animate({width:'100%', height: '100%'}, 1000);
+		}
+		
+		$(".bigPictureWrapper").on("click", function(e) {
+			$(".bigPicture").animate({width:'0%', height:'0%'}, 1000);
+			setTimeout(function(){
+				$(".bigPictureWrapper").hide();
+			}, 1000);
+		});
 	});
 </script>
 

@@ -51,9 +51,12 @@ public class BoardServiceImpl implements BoardService {
 		
 	}
 
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove....." + bno);
+		// Database 먼저 삭제해야 함
+		attachMapper.deleteAll(bno);
 		return mapper.delete(bno) == 1;
 	}
 

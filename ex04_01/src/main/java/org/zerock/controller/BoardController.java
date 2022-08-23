@@ -1,5 +1,9 @@
 package org.zerock.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +35,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService service;
-
-//	@GetMapping("/list")
-//	public void getList(Model model) {
-//		model.addAttribute("list", service.getList());
-//	}
 
 	@GetMapping("/list")
 	public void getList(Criteria cri, Model model, ModelMap map) {
@@ -74,24 +73,14 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
-	/*
-	 * @PostMapping("/register") public String register(BoardVO vo,
-	 * RedirectAttributes rttr) {
-	 * log.info("========================================"); log.info("register: " +
-	 * vo); if (service.register(vo)) { rttr.addFlashAttribute("result",
-	 * vo.getBno()); } return "redirect:/board/list"; }
-	 */
-
 	@PostMapping("/remove")
 	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		if (service.remove(bno)) {
+			// delete attach Files
+			deleteFiles(attachList);
 			rttr.addFlashAttribute("result", "success");
 		}
-		// UriComponentsBuilder 사용전 처리
-//		rttr.addAttribute("pageNum", cri.getPageNum());
-//		rttr.addAttribute("amount", cri.getAmount());
-//		rttr.addAttribute("type", cri.getType());
-//		rttr.addAttribute("keyword", cri.getKeyword());
 		return "redirect:/board/list" + cri.getListLink();
 	}
 
@@ -100,11 +89,6 @@ public class BoardController {
 		if (service.modify(vo)) {
 			rttr.addFlashAttribute("result", "success");
 		}
-		// UriComponentsBuilder 사용전 처리
-//		rttr.addAttribute("pageNum", cri.getPageNum());
-//		rttr.addAttribute("amount", cri.getAmount());
-//		rttr.addAttribute("type", cri.getType());
-//		rttr.addAttribute("keyword", cri.getKeyword());
 		return "redirect:/board/list" + cri.getListLink();
 	}
 	
@@ -113,5 +97,27 @@ public class BoardController {
 	public ResponseEntity<List<BoardAttachVO>> getAttachList(Long bno) {
 		log.info("getAttachList " + bno);
 		return new ResponseEntity<>(service.getAttachList(bno), HttpStatus.OK);
+	}
+	
+	
+	private void deleteFiles(List<BoardAttachVO> attachList) {
+		if(attachList == null || attachList.size() == 0) {
+			return;
+		}
+		log.info("delete attach files..........");
+		log.info(attachList);
+		
+		attachList.forEach(attach -> {
+			try {
+				Path file = Paths.get("C:\\upload\\" + attach.getUploadPath() + "\\" + attach.getUuid() + "_" + attach.getFileName());
+				Files.deleteIfExists(file);
+				if(Files.probeContentType(file).startsWith("image")) {
+					Path thumbNail = Paths.get("C:\\upload\\" + attach.getUploadPath() + "\\s_" + attach.getUuid() + "_" + attach.getFileName());
+					Files.delete(thumbNail);
+				}
+			} catch (Exception e) {
+				log.error("delete file error " + e.getMessage()); 
+			}
+		});
 	}
 }
