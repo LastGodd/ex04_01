@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +23,29 @@ import lombok.extern.log4j.Log4j;
 
 // Rest 하나의 고유한 리소스를 대표하도록 설계된다는 개념
 // @RestController 대신 @Controller + 메서드 선언부 @ResponseBody를 사용해도 동일한 효과가 있다.
-@RestController
-@RequestMapping("/sample")
+// @RestController
+@Controller
+@RequestMapping("/sample/*")
 @Log4j
 public class SampleController {
+	
+	// Security 실습
+	@GetMapping("/all")
+	public void doAll() {
+		log.info("do all can access everybody");
+	}
+	
+	@GetMapping("/member")
+	public void doMember() {
+		log.info("logined member");
+	}
+	
+	@GetMapping("/admin")
+	public void doAdmin() {
+		log.info("admin only");
+	}
 
+	// RestController 실습
 	// produces 속성은 메서드가 생산하는 MIME 타입을 의미
 	@GetMapping(value = "/getText", produces = "text/plain; charset=UTF-8")
 	public String getText() {
