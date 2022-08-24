@@ -13,16 +13,25 @@
 	<h2><c:out value="${logout }"/></h2>
 	
 	<form action="/login" method="POST">
+	
 		<div>
 			<input type="text" name="username" value="admin">
 		</div>
+		
 		<div>
 			<input type="password" name="password" value="admin">
 		</div>
+		
+		<div>
+			<input type="checkbox" name="remember-me">Remember Me
+		</div>
+		
 		<div>
 			<input type="submit">
 		</div>
+		
 		<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+		
 	</form>
 </body>
 </html>
