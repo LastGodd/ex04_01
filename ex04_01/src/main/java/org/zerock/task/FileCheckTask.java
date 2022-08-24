@@ -39,6 +39,7 @@ public class FileCheckTask {
 		return str.replace("-", File.separator);
 	}
 
+	// 매일 새벽 2시에 DB에 기록되지 않은 폴더의 파일을 삭제시킴
 	@Scheduled(cron = "0 0 2 * * *")
 	public void checkFiles() throws Exception {
 		log.warn("File Check Task run.....");
@@ -52,7 +53,7 @@ public class FileCheckTask {
 				.map(vo -> Paths.get("C:\\upload", vo.getUploadPath(), vo.getUuid() + "_" + vo.getFileName()))
 				.collect(Collectors.toList());
 
-		// image file has thumnail file
+		// image file has thumbNail file
 		fileList.stream().filter(vo -> vo.isFileType() == true)
 				.map(vo -> Paths.get("C:\\upload", vo.getUploadPath(), "s_" + vo.getUuid() + "_" + vo.getFileName()))
 				.forEach(p -> fileListPaths.add(p));
