@@ -2,7 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="sec"%>
+	
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +16,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>SB Admin 2 - Bootstrap Admin Theme</title>
+<title>SB Admin</title>
 
 <!-- Bootstrap Core CSS -->
 <link href="/resources/vendor/bootstrap/css/bootstrap.min.css"
@@ -256,8 +258,15 @@
 						<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
 						</li>
 						<li class="divider"></li>
-						<li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i>
-								Logout</a></li>
+						<sec:authorize access="isAuthenticated()">
+							<li><a href="/customLogout"><i class="fa fa-sign-out fa-fw"></i>
+									Logout</a></li>
+						</sec:authorize>
+						
+						<sec:authorize access="isAnonymous()">
+							<li><a href="/customLogin"><i class="fa fa-sign-out fa-fw"></i>
+									Login</a></li>
+						</sec:authorize>
 					</ul> <!-- /.dropdown-user --></li>
 				<!-- /.dropdown -->
 			</ul>

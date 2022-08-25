@@ -9,7 +9,7 @@
 
 	<!-- 한글필터 -->
 	<filter>
-		<filter-name>encoding</filter-name>
+		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
@@ -18,8 +18,8 @@
 	</filter>
 
 	<filter-mapping>
-		<filter-name>encoding</filter-name>
-		<servlet-name>appServlet</servlet-name>
+		<filter-name>encodingFilter</filter-name>
+		<servlet-name>/*</servlet-name>
 	</filter-mapping>
 
 	<!-- 시큐리티 필터 -->
@@ -32,16 +32,7 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
-
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-		/WEB-INF/spring/root-context.xml
-		/WEB-INF/spring/security-context.xml
-		</param-value>
-	</context-param>
-
+	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -64,7 +55,7 @@
 		<!-- fileUpload 추가 -->
 		<multipart-config>
 			<!-- 업로드되는 파일을 저장할 공간 -->
-			<location>c:\\upload\\temp</location>
+			<location>C:\\upload\\temp</location>
 			<!-- 업로드되는 파일 최대 크기 -->
 			<max-file-size>20971520</max-file-size> <!-- 1MB * 20 -->
 			<!-- 한번에 올릴 수 있는 최대 크기 -->
@@ -79,5 +70,13 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+		/WEB-INF/spring/root-context.xml
+		/WEB-INF/spring/security-context.xml
+		</param-value>
+	</context-param>
 
 </web-app>

@@ -8,10 +8,11 @@
 	<bean id="customAccessDenied"
 		class="org.zerock.security.CustomAccessDeniedHandler" />
 
-	<bean id="customLoginSuccess"
-		class="org.zerock.security.CustomLoginSuccessHandler" />
+	<!-- <bean id="customLoginSuccess"
+		class="org.zerock.security.CustomLoginSuccessHandler" /> -->
 
 	<!-- <bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"/> -->
+	
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
@@ -36,13 +37,20 @@
 			ref="customAccessDenied" />
 
 		<!-- 권한에 맞는 페이지를 열어줌 -->
-		<security:form-login login-page="/customLogin"
-			authentication-success-handler-ref="customLoginSuccess" />
+		<!-- <security:form-login login-page="/customLogin"
+			authentication-success-handler-ref="customLoginSuccess" /> -->
+		<security:form-login login-page="/customLogin" />
+
+		<!-- <security:csrf disabled="true" /> -->
 
 		<security:logout logout-url="/customLogout"
 			invalidate-session="true" />
-			
-		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+
+		<security:remember-me
+			data-source-ref="dataSource" token-validity-seconds="604800" />
+
+		<security:logout logout-url="/customLogout"
+			invalidate-session="true" delete-cookies="remember-me,JSESSION_ID" />
 
 	</security:http>
 

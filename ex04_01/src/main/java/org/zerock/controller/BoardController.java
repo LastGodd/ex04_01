@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -54,11 +55,14 @@ public class BoardController {
 	}
 
 	@GetMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public void register() {
 
 	}
 
+	// @PreAuthorize("isAuthenticated()") : 어떤 사용자든 로그인이 성공한 사용자만이 해당 기능을 사용할 수 있게 함
 	@PostMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public String register(BoardVO vo, RedirectAttributes rttr) {
 		log.info("========================================");
 		log.info("register: " + vo);
@@ -72,8 +76,10 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 
+	@PreAuthorize("principal.username == #writer")
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, String writer) {
+		log.info("remove....." + bno);
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		if (service.remove(bno)) {
 			// delete attach Files
@@ -83,9 +89,10 @@ public class BoardController {
 		return "redirect:/board/list" + cri.getListLink();
 	}
 
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/modify")
-	public String modify(BoardVO vo, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
-		if (service.modify(vo)) {
+	public String modify(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+		if (service.modify(board)) {
 			rttr.addFlashAttribute("result", "success");
 		}
 		return "redirect:/board/list" + cri.getListLink();
