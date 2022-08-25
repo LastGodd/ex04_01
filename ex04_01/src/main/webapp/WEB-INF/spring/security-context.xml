@@ -8,11 +8,11 @@
 	<bean id="customAccessDenied"
 		class="org.zerock.security.CustomAccessDeniedHandler" />
 
-	<!-- <bean id="customLoginSuccess"
-		class="org.zerock.security.CustomLoginSuccessHandler" /> -->
+	<!-- <bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler" 
+		/> -->
 
 	<!-- <bean id="customPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"/> -->
-	
+
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
@@ -21,7 +21,6 @@
 
 	<security:http>
 
-		<!-- 특정 url에 접근할 때 인터셉터를 이용해서 접근을 제한 한다. pattern : 주소, access : 권한 -->
 		<security:intercept-url pattern="/sample/all"
 			access="permitAll" />
 
@@ -31,26 +30,16 @@
 		<security:intercept-url pattern="/sample/admin"
 			access="hasRole('ROLE_ADMIN')" />
 
-		<!-- error-page 속성이나 ref 속성 둘 중 하나만을 사용 함 -->
-		<!-- <security:access-denied-handler error-page="/accessError"/> -->
 		<security:access-denied-handler
 			ref="customAccessDenied" />
 
-		<!-- 권한에 맞는 페이지를 열어줌 -->
-		<!-- <security:form-login login-page="/customLogin"
-			authentication-success-handler-ref="customLoginSuccess" /> -->
 		<security:form-login login-page="/customLogin" />
-
-		<!-- <security:csrf disabled="true" /> -->
-
-		<security:logout logout-url="/customLogout"
-			invalidate-session="true" />
 
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 
 		<security:logout logout-url="/customLogout"
-			invalidate-session="true" delete-cookies="remember-me,JSESSION_ID" />
+			invalidate-session="true" delete-cookies="remember-me, JSESSION_ID" />
 
 	</security:http>
 
